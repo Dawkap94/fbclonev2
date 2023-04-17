@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mainpage</title>
+</head>
+<body>
+{% include 'base.html'%}
+{% if request.user.is_authenticated %}
+    {% include 'create_post.html' %}
+{% else %}
+{% endif %}
+</body>
+</html>
