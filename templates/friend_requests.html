@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Friend requests</title>
+  <link rel="stylesheet" href="{% static 'css/friends_list.css' %}">
+</head>
+{% block content %}
+  <h1>Friend Requests</h1>
+  <h2>Received Requests:</h2>
+  {% if received_requests %}
+    <ul>
+      {% for request in received_requests %}
+        <li>
+          {{ request.sender.username }} wants to be your friend.
+          <form method="post" action="{% url 'accept_friend_request' request.id %}">
+            {% csrf_token %}
+            <button type="submit">Accept</button>
+          </form>
+          <form method="post" action="{% url 'decline_friend_request' request.id %}">
+            {% csrf_token %}
+            <button type="submit">Decline</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You have no friend requests.</p>
+  {% endif %}
+
+  <h2>Sent Requests:</h2>
+  {% if sent_requests %}
+    <ul>
+      {% for request in sent_requests %}
+        <div class="friendRequests">
+          <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ request.receiver.avatar.url }}" height="100px" width="100px">
+          <form method="post" action="{% url 'cancel_friend_request' request.id %}">
+            {% csrf_token %}
+            <p></p>
+            <button type="submit" class="btn btn-danger">Cancel</button>
+          </form>
+        </div>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You haven't sent any friend requests.</p>
+  {% endif %}
+{% endblock %}
+</html>

@@ -49,15 +49,16 @@
         </form>
       </li>
     </ul>
-    {% if request.user.is_authenticated %}
+{% if request.user.is_authenticated %}
       <a class="nav-link mr-0" href="{% url 'account' %}">
           {% if user.avatar %}
-          <img src="{{ user.avatar.url }}" alt="{{ user.username }}'s avatar"
-              width="30" height="30">
+          <img src="{{ request.user.avatar.url }}" alt="{{ user.username }}'s avatar" id="Avatar">
           {% endif %}
         Logged as {{request.user.username}}</a>
-        <a class="nav-link" href="{% url 'logout' %}"> Logout </a>
-          {% else %}
+          <div>
+            <a class="nav-link" href="{% url 'logout' %}"> Logout </a>
+            {% else %}
+          <div>
         <a class="nav-link" href="{% url 'register'%}"> Register New Account </a>
         <a class="nav-link" href="{% url 'login'%}"> Log In  </a>
       </a>

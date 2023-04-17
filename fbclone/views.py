@@ -1,12 +1,10 @@
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
-
-from .forms import NewUserForm, AvatarForm, PostForm, EditUserInfoForm
-from .models import Post, CustomUser
+from .forms import NewUserForm, AvatarForm, PostForm
+from .models import Post, CustomUser, FriendRequest, FriendList
 
 
 def index(request):
@@ -68,7 +66,7 @@ def account_management(request):
 
 
 def create_post(request):
-    posts = Post.objects.filter(author=request.user.id)
+    posts = Post.objects.filter(author=request.user.id)[::-1]
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -85,12 +83,102 @@ def create_post(request):
 
 def friends(request):
     user = CustomUser.objects.get(id=request.user.id)
+    received_requests = FriendRequest.objects.filter(receiver=request.user, is_active=True)
+    sent_requests = FriendRequest.objects.filter(sender=request.user, is_active=True)
+    waiting_requests = FriendRequest.objects.filter(receiver=request.user, is_active=False)
+    any_request = FriendRequest.objects.all()
     all_users = CustomUser.objects.all()
-    friends = user.friends.all()
     return render(request, "friends_list.html", {"friends": friends,
-                                                 "all_users": all_users})
+                                                 "all_users": all_users,
+                                                 'received_requests': received_requests,
+                                                 'sent_requests': sent_requests,
+                                                 'waiting_requests': waiting_requests,
+                                                 'any_request': any_request
+                                                 })
 
 
 def profile(request, user_id):
+    User = get_user_model()
     user = get_object_or_404(CustomUser, pk=user_id)
-    return render(request, 'profile.html', {'user': user})
+    friend = get_object_or_404(User, id=user_id)
+    current_user = request.user
+    if FriendRequest.objects.filter(sender=current_user, receiver=friend, is_active=True).exists():
+        sent = True
+    else:
+        sent = False
+    return render(request, 'profile.html', {'user': user,
+                                            'sent': sent})
+
+
+
+User = get_user_model()
+@login_required
+def add_friend(request, user_id):
+    user = request.user
+    friend = get_object_or_404(User, id=user_id)
+    user_friends_list, created = FriendList.objects.get_or_create(user=user)
+    friend_friends_list, created = FriendList.objects.get_or_create(user=friend)
+
+    # Sprawdź, czy zaproszenie już zostało wysłane
+    if FriendRequest.objects.filter(sender=user, receiver=friend).exists():
+        sent = True
+        if FriendRequest.objects.filter(sender=user, receiver=friend, is_active=False).exists():
+            friend_request = FriendRequest.objects.filter(sender=user,
+                                           receiver=friend).first()  # pobierz pierwszy obiekt pasujący do kryteriów
+            if friend_request:
+                friend_request.is_active = True
+                friend_request.save()  # zapisz zmiany w bazie danych
+                messages.error(request, f"Friend request to {friend.username} sent again correctly.")
+                return redirect('profile', user_id=user_id)
+        messages.error(request, f"You've already sent a friend request to {friend.username}")
+        return redirect('profile', user_id=user_id)
+
+    # Sprawdź, czy oczekuje już na akceptację zaproszenia
+    if FriendRequest.objects.filter(sender=friend, receiver=user, is_active=True).exists():
+        messages.error(request, f"{friend.username} already sent you a friend request")
+        return redirect('profile', user_id=user_id)
+
+    # Dodaj znajomego i wyślij zaproszenie
+    user_friends_list.friends.add(friend)
+    friend_friends_list.friends.add(user)
+    FriendRequest.objects.create(sender=user, receiver=friend)
+    messages.success(request, f"You've sent a friend request to {friend.username}")
+    return redirect('profile', user_id=user_id)
+
+
+@login_required
+def remove_friend(request, user_id):
+    user = request.user
+    friend = User.objects.get(id=user_id)
+    user_friends_list = FriendList.objects.get(user=user)
+    user_friends_list.remove_friend(friend)
+    friend_friends_list = FriendList.objects.get(user=friend)
+    friend_friends_list.remove_friend(user)
+    return redirect('profile', id=user_id)
+
+
+@login_required
+def friend_requests(request):
+    return render(request, 'friend_requests.html')
+
+
+@login_required
+def accept_friend_request(request, friend_request_id):
+    friend_request = FriendRequest.objects.get(id=friend_request_id)
+    friend_request.accept()
+    return redirect('friend_requests')
+
+
+@login_required
+def decline_friend_request(request, friend_request_id):
+    friend_request = FriendRequest.objects.get(id=friend_request_id)
+    friend_request.decline()
+    return redirect('friends')
+
+
+@login_required
+def cancel_friend_request(request, friend_request_id):
+    friend_request = FriendRequest.objects.get(id=friend_request_id)
+    friend_request.cancel()
+    messages.success(request, "Friend invitation removed.")
+    return redirect('friends')

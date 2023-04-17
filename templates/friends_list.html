@@ -12,6 +12,16 @@
 </head>
 <body>
 {% include 'base.html'%}
+{% include 'friend_requests.html' %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-dismissible alert-success">
+          <button type="button" class="close" data-dismiss="alert">
+          </button>
+          <strong>{{message}}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
 <p></p>
 <div class="container">
         <h2> <p style="center">Looking for more friends?</p> </h2>

@@ -5,3 +5,12 @@
     object-position: center;
     width: 100px;
 }
+
+.friendRequests {
+  font-family: arial;
+  font-size: 24px;
+  margin: 25px;
+  width: 100px;
+  height: 200px;
+  text-align: center;
+}

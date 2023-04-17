@@ -7,3 +7,11 @@
 .navbar{
     height: 75%;
 }
+
+#Avatar{
+    border-radius: 50%;
+    height: 35px;
+    object-fit: cover;
+    object-position: center;
+    width: 35px;
+}

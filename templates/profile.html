@@ -14,6 +14,15 @@
 </head>
 <body>
 {% include 'base.html' %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-dismissible alert-success">
+          <button type="button" class="close" data-dismiss="alert">
+          </button>
+          <strong>{{message}}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -33,6 +42,11 @@
                     <h2>Your profile: {{user.first_name}} {{user.last_name}} ({{user.username}})</h2>
                     {% else %}
                     <h2>{{user.first_name}} {{user.last_name}} ({{user.username}})</h2>
+                        {% if sent == False %}
+                            <a href="{% url 'add_friend' user.id %}"><button class="btn btn-secondary" >Send friend request</button></a>
+                        {% else %}
+                            <button type="submit" class="btn btn-success">Friend request already sent</button>
+                        {% endif %}
                     {% endif %}
                 </div>
 
