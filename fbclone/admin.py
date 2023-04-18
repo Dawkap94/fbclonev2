@@ -8,14 +8,21 @@ admin.site.register(Post)
 
 class FriendListAdmin(admin.ModelAdmin):
     list_filter = ['user']
-    list_display = ['user']
-    search_fields = ['user']
+    list_display = ['user', 'display_friends']
+    search_fields = ['user__username']
     readonly_fields = ['user']
+
+    def display_friends(self, obj):
+        return ", ".join([str(friend) for friend in obj.friends.all()])
+
+    display_friends.short_description = 'Friends'
 
     class Meta:
         model = FriendList
 
+
 admin.site.register(FriendList, FriendListAdmin)
+
 
 class FriendRequestAdmin(admin.ModelAdmin):
     list_filter = ['sender', 'receiver']
@@ -24,5 +31,6 @@ class FriendRequestAdmin(admin.ModelAdmin):
 
     class Meta:
         model = FriendRequest
+
 
 admin.site.register(FriendRequest, FriendRequestAdmin)

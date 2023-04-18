@@ -66,7 +66,15 @@ def account_management(request):
 
 
 def create_post(request):
-    posts = Post.objects.filter(author=request.user.id)[::-1]
+    if request.user.is_authenticated:
+        user = request.user
+        friend_list = FriendList.objects.get(user=user)
+        friend_ids = [friend.id for friend in friend_list.friends.all()] + [request.user.id]
+        posts = Post.objects.filter(author__id__in=friend_ids).order_by('-pub_date')
+        all_friends = friend_list.friends.all()
+    else:
+        all_friends = []
+        posts = []
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -78,11 +86,12 @@ def create_post(request):
     else:
         form = PostForm()
     return render(request, 'create_post.html', {'form': form,
-                                                'posts': posts})
+                                                'posts': posts,
+                                                'all_friends': all_friends})
 
-
+@login_required
 def friends(request):
-    user = CustomUser.objects.get(id=request.user.id)
+    user = CustomUser.objects.get(username=request.user.username)
     received_requests = FriendRequest.objects.filter(receiver=request.user, is_active=True)
     sent_requests = FriendRequest.objects.filter(sender=request.user, is_active=True)
     waiting_requests = FriendRequest.objects.filter(receiver=request.user, is_active=False)
@@ -166,7 +175,7 @@ def friend_requests(request):
 def accept_friend_request(request, friend_request_id):
     friend_request = FriendRequest.objects.get(id=friend_request_id)
     friend_request.accept()
-    return redirect('friend_requests')
+    return redirect('friends')
 
 
 @login_required
@@ -182,3 +191,18 @@ def cancel_friend_request(request, friend_request_id):
     friend_request.cancel()
     messages.success(request, "Friend invitation removed.")
     return redirect('friends')
+
+
+def user_friends(request, user_id):
+    current_user = request.user
+    user = get_object_or_404(CustomUser, pk=user_id)
+    User = get_user_model()
+    if FriendRequest.objects.filter(sender=current_user, receiver=user, is_active=True).exists():
+        sent = True
+    else:
+        sent = False
+    friend_list = FriendList.objects.get(user=user)
+    all_friends = friend_list.friends.all()
+    return render(request, 'user_friends.html', {'all_friends': all_friends,
+                                                 'user': user,
+                                                 'sent': sent})

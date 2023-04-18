@@ -28,6 +28,7 @@
     <hr>
     <div class="row bootstrap snippets bootdeys">
     {% for elem in all_users %}
+        {% if elem.username != request.user.username %}
         <div class="col-md-3">
             <div class="panel text-center">
                 <a href="{% url 'profile' user_id=elem.id %}">
@@ -48,6 +49,7 @@
             </div>
           </div>
     </div>
+        {% endif %}
     {% endfor %}
 </div>
 

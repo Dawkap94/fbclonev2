@@ -14,3 +14,15 @@
   height: 200px;
   text-align: center;
 }
+
+.inline{
+    display:inline-block;
+}
+
+.friendAvatar {
+    border-radius: 50%;
+    height: 25px;
+    object-fit: cover;
+    object-position: center;
+    width: 25px;
+}

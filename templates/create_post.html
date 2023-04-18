@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="pull-left meta">
                                     <div class="title h5">
-                                        <a href="/user/{{user.id}}"><b>{{user.username}}</b></a>
+                                        <a href="/user/{{elem.author.id}}"><b>{{elem.author.username}}</b></a>
                                         made a post.
                                     </div>
                                     <h6 class="text-muted time">{{elem.pub_date}}</h6>
@@ -69,7 +69,14 @@
         {% endif %}
     </div>
     <div class="col-3">
-        TUTAJ BEDA ZNAJOMI
+        Your friends:<br>
+        {% for friend in all_friends %}
+        <li>
+            <a href="/user/{{friend.id}}">
+                <img alt="Avatar" class="img-md img-circle img-border mar-btm friendAvatar"
+                     src="{{ friend.avatar.url }}"> {{friend}}</a>
+        </li>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
