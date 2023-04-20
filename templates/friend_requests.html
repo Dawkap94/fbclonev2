@@ -5,17 +5,23 @@
     <meta charset="UTF-8">
     <title>Friend requests</title>
   <link rel="stylesheet" href="{% static 'css/friends_list.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
 </head>
+<p></p>
 {% block content %}
-  <h1>Friend Requests</h1>
+<div class="container">
+  <div class="friendsList">
   <h2>Received Requests:</h2>
+  <hr>
+  <div class="row bootstrap snippets bootdeys">
   {% if received_requests %}
     <ul>
       {% for request in received_requests %}
         <div class="friendRequests">
           <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ request.sender.avatar.url }}" height="100px" width="100px"><br>
           {{ request.sender.username }}
-          <div class="row">
+          <div class="col-md-3">
             <form method="post" action="{% url 'accept_friend_request' request.id %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-success"><img src="https://icon-library.com/images/tick-icon/tick-icon-27.jpg"
@@ -31,10 +37,22 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>You have no friend requests.</p>
-  {% endif %}
+    <div class="col-md-3">
+          You have no friend requests.
+    </div>
+  </div>
 
+  {% endif %}
+  </div>
+</div>
+
+<p></p>
+
+<div class="container">
+  <div class="friendsList">
   <h2>Sent Requests:</h2>
+  <hr>
+  <div class="row bootstrap snippets bootdeys">
   {% if sent_requests %}
     <ul>
       {% for request in sent_requests %}
@@ -49,7 +67,12 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>You haven't sent any friend requests.</p>
+    <div class="col-md-3">
+    You haven't sent any requests.
+    </div>
   {% endif %}
 {% endblock %}
+</div>
+</div>
+</div>
 </html>

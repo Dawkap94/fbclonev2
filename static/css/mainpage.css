@@ -24,3 +24,48 @@
     object-position: center;
     width: 100px;
 }
+
+.suggestedFriend{
+    border-radius: 50%;
+    height: 40px;
+    object-fit: cover;
+    object-position: center;
+    width: 40px;
+}
+
+.FriendsDiv{
+    border-style: rounded;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-left: thin;
+    border-bottom: thin;
+    border-width: 3px;
+}
+
+.FriendsDiv2{
+    padding: 10px;
+    border-top: thin;
+    background-color: #f0f0f0;
+    border-left: thin;
+    border-bottom: thin;
+}
+
+
+#postForm{
+    padding: 15px;
+    border-top: thin;
+    background-color:#f0f0f0;
+    border-left: thin;
+    border-bottom: thin;
+}
+
+
+#postsList{
+    padding: 15px;
+    border-top: thin;
+    background-color: #f0f0f0;
+    border-left: thin;
+    border-bottom: thin;
+}
+
+

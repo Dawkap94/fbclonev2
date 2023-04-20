@@ -26,3 +26,16 @@
     object-position: center;
     width: 25px;
 }
+
+
+.friendsList{
+    padding: 15px;
+    border-top: thin;
+    background-color: #f0f0f0;
+    border-left: thin;
+    border-bottom: thin;
+}
+
+.timelinePost{
+    margin-bottom: 5%;
+}

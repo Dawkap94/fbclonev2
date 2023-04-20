@@ -24,11 +24,43 @@
 {% endif %}
 <p></p>
 <div class="container">
-        <h2> <p style="center">Looking for more friends?</p> </h2>
-    <hr>
-    <div class="row bootstrap snippets bootdeys">
-    {% for elem in all_users %}
-        {% if elem.username != request.user.username %}
+    <div class="friendsList">
+        <h2>Your friends: </h2>
+        <hr>
+        <div class="row bootstrap snippets bootdeys" >
+        {% for elem in all_users %}
+            {% if elem.username != request.user.username and elem.username in friend_list %}
+            <div class="col-md-3">
+                <div class="panel text-center">
+                    <a href="{% url 'profile' user_id=elem.id %}">
+                    <div class="panel-body">
+                        {% if elem.avatar %}
+                      <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ elem.avatar.url }}" height="100px" width="100px">
+                        {% else %}
+                        No photo
+                        {% endif %}
+                      <h4 class="mar-no">{{elem.username}}</h4>
+                    </div>
+                    </a>
+                <div class="pad-all">
+                  <div class="pad-btm">
+                    <button class="btn btn-primary">Follow</button>
+                    <button class="btn btn-success">Message</button>
+                  </div>
+                </div>
+              </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+        </div>
+    </div>
+    <p></p>
+    <div class="friendsList">
+        <h2>Looking for more friends? Check this users:</h2>
+        <hr>
+        <div class="row bootstrap snippets bootdeys">
+        {% for elem in all_users %}
+        {% if elem.username != request.user.username and elem.username not in friend_list %}
         <div class="col-md-3">
             <div class="panel text-center">
                 <a href="{% url 'profile' user_id=elem.id %}">
@@ -51,10 +83,9 @@
     </div>
         {% endif %}
     {% endfor %}
+    </div>
 </div>
-
-
-
+    <p></p>
 
 
 </body>

@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <title>Register New Account</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
 </head>
-{% extends "base.html" %}
+{% include "base.html" %}
 
 {% block content %}
 <div class="container py-5">

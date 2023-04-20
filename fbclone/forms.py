@@ -43,7 +43,7 @@ class PostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control',
                                             'placeholder': 'Your post title'}),
             'content': forms.Textarea(attrs={'class': 'form-control',
-                                             'placeholder': 'Write something'}),
+                                             'placeholder': "What's on your mind?"}),
         }
 
 

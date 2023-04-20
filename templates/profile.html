@@ -9,6 +9,7 @@
 <!--      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">-->
       <link rel="stylesheet" href="{% static 'css/my_profile.css'%}">
       <link rel="stylesheet" href="{% static 'css/base.css'%}">
+    <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
 
 </head>
@@ -29,7 +30,7 @@
             <div class="fb-profile-block">
                 <div class="fb-profile-block-thumb cover-container"></div>
                 <div class="profile-img">
-                    <a href="#">
+                    <a href="{% url 'account' %}">
                         {% if user.avatar %}
                         <img src="{{ user.avatar.url }}" alt="" title="">
                         {% else %}
@@ -42,18 +43,22 @@
                     <h2>Your profile: {{user.first_name}} {{user.last_name}} ({{user.username}})</h2>
                     {% else %}
                     <h2>{{user.first_name}} {{user.last_name}} ({{user.username}})</h2>
-                        {% if sent == False %}
+                        {% if sent == False and user.username not in friend_list %}
                             <a href="{% url 'add_friend' user.id %}"><button class="btn btn-secondary" >Send friend request</button></a>
-                        {% else %}
+                        {% elif sent == True and user.username not in friend_list %}
                             <button type="submit" class="btn btn-success">Friend request already sent</button>
+                        {% else %}
                         {% endif %}
+                    {% endif %}
+                    {% if user.username in friend_list %}
+                    <a href="{% url 'remove_friend' user_id=user.id %}"><button type="submit" class="btn btn-danger">REMOVE FRIEND</button></a>
                     {% endif %}
                 </div>
 
                 <div class="fb-profile-block-menu">
                     <div class="block-menu">
                         <ul>
-                            <li><a href="#">Timeline</a></li>
+                            <li><a href="/user/{{ user.id }}/timeline/">Timeline</a></li>
                             <li><a href="#">about</a></li>
                             <li><a href="/user/{{ user.id }}/friends/">Friends</a></li>
                             <li><a href="#">Photos</a></li>
@@ -62,9 +67,9 @@
                     </div>
                     <div class="block-menu">
                         <ul>
-                            <li><a href="#">Timeline</a></li>
+                            <li><a href="/user/{{ user.id }}/timeline/">Timeline</a></li>
                             <li><a href="#">about</a></li>
-                            <li><a href="#">Friends</a></li>
+                            <li><a href="/user/{{ user.id }}/friends/">Friends</a></li>
                             <li><a href="#">Photos</a></li>
                             <li><a href="#">More...</a></li>
                         </ul>

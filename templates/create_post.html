@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/friends_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mainpage.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 </head>
 {% include 'base.html' %}
 {% if messages %}
@@ -26,8 +28,9 @@
     </div>
     <div class="col-5">
         {% if request.user.is_authenticated %}
-          <h2>Create New Post</h2>
-        <div class="form-group">
+        <p></p>
+        <div class="form-group" id="postForm">
+            <h2>Create New Post</h2>
           <form method="post">
               {% csrf_token %}
               {{ form.as_p }}
@@ -35,7 +38,7 @@
           </form>
         </div>
             {% for elem in posts %}
-                <div class="container bootstrap snippets bootdey">
+                <div class="container bootstrap snippets bootdey" id="postsList">
                         <div class="panel panel-white post panel-shadow">
                             <div class="post-heading">
                                 <div class="pull-left image">
@@ -50,7 +53,7 @@
                                 </div>
                             </div>
                             <div class="post-description">
-                                <p>{{elem.content}}</p>
+                                <p><b>{{elem.title}}</b><br>"{{elem.content}}"</p>
                             </div>
                             <div class="post-footer">
                                 <div class="input-group">
@@ -69,7 +72,18 @@
         {% endif %}
     </div>
     <div class="col-3">
-        Your friends:<br>
+        <p></p>
+        <div class="FriendsDiv">
+            <h5>Suggested friend:</h5>
+            <img alt="Avatar" class="img-md img-circle img-border mar-btm suggestedFriend"
+                 src="{{ suggested_friend.avatar.url }}"><a href="/user/{{suggested_friend.id}}"> {{suggested_friend}}</a>
+            <p></p>
+            <a href="{% url 'friends'%}">More</a>
+        </div>
+        <p></p>
+
+        <div class="FriendsDiv2">
+        <h5>Your friends:</h5>
         {% for friend in all_friends %}
         <li>
             <a href="/user/{{friend.id}}">
@@ -77,6 +91,7 @@
                      src="{{ friend.avatar.url }}"> {{friend}}</a>
         </li>
         {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

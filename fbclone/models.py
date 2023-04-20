@@ -6,6 +6,8 @@ from django.conf import settings
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
+    about = models.CharField(max_length=300, blank=True, null=True)
+    birth_date = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return f"{self.username}"
@@ -71,9 +73,8 @@ class FriendRequest(models.Model):
 
     def decline(self):
         self.is_active = False
-        self.save()
+        self.delete()
 
     def cancel(self):
         self.is_active = False
         self.delete()
-        self.save()
