@@ -39,12 +39,12 @@
                         {% else %}
                         No photo
                         {% endif %}
-                      <h4 class="mar-no">{{elem.username}}</h4>
+                      <h4 class="mar-no">{{elem.first_name}} {{elem.last_name}}</h4>
                     </div>
                     </a>
                 <div class="pad-all">
                   <div class="pad-btm">
-                    <button class="btn btn-primary">Follow</button>
+                    <button class="btn btn-primary">See timeline</button>
                     <button class="btn btn-success">Message</button>
                   </div>
                 </div>
@@ -70,12 +70,12 @@
                     {% else %}
                     No photo
                     {% endif %}
-                  <h4 class="mar-no">{{elem.username}}</h4>
+                  <h4 class="mar-no">{{elem.first_name}} {{elem.last_name}}</h4>
                 </div>
                 </a>
             <div class="pad-all">
               <div class="pad-btm">
-                <button class="btn btn-primary">Follow</button>
+                  <a href="{% url 'profile' user_id=elem.id %}timeline"><button class="btn btn-primary">See timeline</button></a>
                 <button class="btn btn-success">Message</button>
               </div>
             </div>

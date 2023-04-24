@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <title>Create post</title>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/friends_list.css' %}">
     <link rel="stylesheet" href="{% static 'css/mainpage.css' %}">
     <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
@@ -46,7 +48,7 @@
                                 </div>
                                 <div class="pull-left meta">
                                     <div class="title h5">
-                                        <a href="/user/{{elem.author.id}}"><b>{{elem.author.username}}</b></a>
+                                        <a href="/user/{{elem.author.id}}"><b>{{elem.author.first_name}}</b></a>
                                         made a post.
                                     </div>
                                     <h6 class="text-muted time">{{elem.pub_date}}</h6>
@@ -76,7 +78,7 @@
         <div class="FriendsDiv">
             <h5>Suggested friend:</h5>
             <img alt="Avatar" class="img-md img-circle img-border mar-btm suggestedFriend"
-                 src="{{ suggested_friend.avatar.url }}"><a href="/user/{{suggested_friend.id}}"> {{suggested_friend}}</a>
+                 src="{{ suggested_friend.avatar.url }}"><a href="/user/{{suggested_friend.id}}"> {{suggested_friend.first_name}} {{suggested_friend.last_name}}</a>
             <p></p>
             <a href="{% url 'friends'%}">More</a>
         </div>
@@ -88,7 +90,7 @@
         <li>
             <a href="/user/{{friend.id}}">
                 <img alt="Avatar" class="img-md img-circle img-border mar-btm friendAvatar"
-                     src="{{ friend.avatar.url }}"> {{friend}}</a>
+                     src="{{ friend.avatar.url }}"> {{friend.first_name}} {{friend.last_name}}</a>
         </li>
         {% endfor %}
         </div>
@@ -96,7 +98,4 @@
 </div>
 {% endblock %}
 </html>
-
-
-
 

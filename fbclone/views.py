@@ -1,9 +1,12 @@
 import random
+import json
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q
+from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import NewUserForm, AvatarForm, PostForm
 from .models import Post, CustomUser, FriendRequest, FriendList
@@ -75,7 +78,8 @@ def create_post(request):
             friend_ids = [friend.id for friend in friend_list.friends.all()] + [request.user.id]
             posts = Post.objects.filter(author__id__in=friend_ids).order_by('-pub_date')
             all_friends = friend_list.friends.all()
-            not_friends = [person for person in CustomUser.objects.all() if person not in all_friends and person != user]
+            not_friends = [person for person in CustomUser.objects.all() if
+                           person not in all_friends and person != user]
             suggested_friend = random.choice(not_friends)
         except:
             friend_list = []
@@ -253,3 +257,8 @@ def user_timeline(request, user_id):
                                              'user': user,
                                              'sent': sent})
 
+
+def search_results(request):
+    query = request.GET.get('q')
+    results = CustomUser.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query))
+    return render(request, 'search_results.html', {'results': results})

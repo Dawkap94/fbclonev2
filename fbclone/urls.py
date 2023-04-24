@@ -38,7 +38,7 @@ urlpatterns = [
     path('cancel-friend-request/<int:friend_request_id>/', views.cancel_friend_request, name='cancel_friend_request'),
     path('user/<int:user_id>/friends/', views.user_friends, name='user_friends'),
     path('user/<int:user_id>/timeline/', views.user_timeline, name='user_timeline'),
-
+    path('search_results/', views.search_results, name='search_results'),
 ]
 
 if settings.DEBUG:

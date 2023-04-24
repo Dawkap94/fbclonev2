@@ -68,4 +68,10 @@
     border-bottom: thin;
 }
 
+#SearchResult{
+    height: 100px;
+    object-fit: cover;
+    object-position: center;
+    width: 100px;
+}
 
