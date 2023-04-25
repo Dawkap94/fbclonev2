@@ -16,7 +16,9 @@
     width: 35px;
 }
 
-
+body{
+    overflow-x: hidden;
+}
 .userAvatar {
     border-radius: 50%;
     height: 100px;
@@ -50,6 +52,12 @@
     border-bottom: thin;
 }
 
+.GroupsDiv{
+    padding: 15px;
+    background-color:#f0f0f0;
+    border-right: thin;
+    border-bottom: thin;
+}
 
 #postForm{
     padding: 15px;

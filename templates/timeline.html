@@ -3,14 +3,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Timeline</title>
+    <title>{{user.first_name}} {{user.last_name}} profile </title>
 
     <!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"-->
 <!--      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">-->
             <link rel="stylesheet" href="{% static 'css/my_profile.css'%}">
             <link rel="stylesheet" href="{% static 'css/mainpage.css'%}">
+            <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
 </head>
 <body>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-dismissible alert-success">
+          <button type="button" class="close" data-dismiss="alert">
+          </button>
+          <strong>{{message}}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
 {% include 'base.html' %}
 <div class="container">
     <div class="row">
@@ -68,18 +81,59 @@
     </div>
 </div>
 
+{% block content %}
 <p></p>
 <div class="container">
-        <div class="row">
-            {% for post in posts %}
-                <div class="col-md-6 timelinePost">
-                    <img class="userAvatar" src="{{ post.author.avatar.url }}" alt="" title="">
-                    <h6 class="text-muted time">{{post.pub_date}}</h6>
-                    <b>{{post.title}}</b><br> {{post.content}}
+    <div class="row">
+        <div class="col-md-12 timelinePost">
+        {% if request.user.is_authenticated %}
+            {% for elem in posts %}
+            <div class="container bootstrap snippets bootdey" id="postsList">
+                <div class="panel panel-white post panel-shadow">
+                    <div class="post-heading">
+                        <div class="pull-left image">
+                            <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ elem.author.avatar.url }}" height="100px" width="100px">
+                        </div>
+                        <div class="pull-left meta">
+                            <div class="title h5">
+                                <a href="/user/{{elem.author.id}}"><b>{{elem.author.first_name}}</b></a>
+                                made a post.
+                            </div>
+                            <h6 class="text-muted time">{{elem.pub_date | timesince}}</h6>
+                        </div>
+                    </div>
+                    <div class="post-description">
+                        <p><b>{{elem.title}}</b><br>"{{elem.content}}"</p>
+                    </div>
+                    <div class="post-footer">
+                        <ul class="fb-comments">
+                            <hr>
+                            {% for comment in comments %}
+                                {% if comment.post.id == elem.id %}
+                                    <li>
+                                      <a href="#" class="cmt-thumb">
+                                        <img alt="Avatar" class="img-md img-circle img-border mar-btm commentAvatar"
+                                             src="{{ comment.author.avatar.url }}">
+                                      </a>
+                                        <div class="cmt-details">
+                                            <a href="{% url 'profile' user_id=comment.author.id%}">{{comment.author.first_name}} {{comment.author.last_name}}</a>
+                                            <span> {{comment.content}} </span>
+                                            <p> {{comment.pub_date | timesince }} <a href="#" class="like-link">Like</a></p>
+                                        </div>
+                                    </li>
+                                    <hr>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <p></p>
         </div>
-</div>
+    </div>
 <p></p>
+    {% endblock %}
 </body>
 </html>

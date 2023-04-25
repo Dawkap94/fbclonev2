@@ -1,5 +1,4 @@
 import random
-import json
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
@@ -171,14 +170,12 @@ User = get_user_model()
 def add_friend(request, user_id):
     user = request.user
     friend = get_object_or_404(User, id=user_id)
-    user_friends_list, created = FriendList.objects.get_or_create(user=user)
-    friend_friends_list, created = FriendList.objects.get_or_create(user=friend)
-    # Sprawdź, czy zaproszenie już zostało wysłane
+    # Check if the invitation exist
     if FriendRequest.objects.filter(sender=user, receiver=friend, is_active=True).exists():
         sent = True
         if FriendRequest.objects.filter(sender=user, receiver=friend, is_active=False).exists():
             friend_request = FriendRequest.objects.filter(sender=user,
-                                                          receiver=friend).first()  # pobierz pierwszy obiekt pasujący do kryteriów
+                                                          receiver=friend).first()  # Get first matching object
             if friend_request:
                 friend_request.is_active = True
                 friend_request.save()  # zapisz zmiany w bazie danych
@@ -187,12 +184,12 @@ def add_friend(request, user_id):
         messages.error(request, f"You've already sent a friend request to {friend.username}")
         return redirect('profile', user_id=user_id)
 
-    # Sprawdź, czy oczekuje już na akceptację zaproszenia
+    # Check if invitation is waiting
     if FriendRequest.objects.filter(sender=friend, receiver=user, is_active=True).exists():
         messages.error(request, f"{friend.username} already sent you a friend request")
         return redirect('profile', user_id=user_id)
 
-    # Wyślij zaproszenie
+    # Send invitation
     FriendRequest.objects.create(sender=user, receiver=friend)
     messages.success(request, f"You've sent a friend request to {friend.username}")
     return redirect('profile', user_id=user_id)
@@ -259,6 +256,7 @@ def user_friends(request, user_id):
 def user_timeline(request, user_id):
     current_user = request.user
     user = get_object_or_404(CustomUser, pk=user_id)
+
     User = get_user_model()
     if FriendRequest.objects.filter(sender=current_user, receiver=user, is_active=True).exists():
         sent = True
@@ -266,7 +264,9 @@ def user_timeline(request, user_id):
         sent = False
     user = get_object_or_404(CustomUser, pk=user_id)
     posts = Post.objects.filter(author=user).order_by('-pub_date')
+    comments = Comment.objects.all()
     return render(request, 'timeline.html', {'posts': posts,
+                                             'comments': comments,
                                              'user': user,
                                              'sent': sent})
 
