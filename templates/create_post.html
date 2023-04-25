@@ -51,7 +51,13 @@
                                 </div>
                                 <div class="pull-left meta">
                                     <div class="title h5">
-                                        <a href="/user/{{elem.author.id}}"><b>{{elem.author.first_name}}</b></a>
+                                        <a href="/user/{{elem.author.id}}"><b>
+                                            {% if elem.author.first_name %}
+                                            {{elem.author.first_name}}
+                                            {% else %}
+                                            ADMIN
+                                            {% endif %}
+                                        </b></a>
                                         made a post.
                                     </div>
                                     <h6 class="text-muted time">{{elem.pub_date | timesince}}</h6>
@@ -127,7 +133,13 @@
         <li>
             <a href="/user/{{friend.id}}">
                 <img alt="Avatar" class="img-md img-circle img-border mar-btm friendAvatar"
-                     src="{{ friend.avatar.url }}"> {{friend.first_name}} {{friend.last_name}}</a>
+                     src="{{ friend.avatar.url }}">
+                {% if friend.first_name %}
+                {{friend.first_name}} {{friend.last_name}}
+                {% else %}
+                ADMIN
+                {% endif%}
+                </a>
         </li>
         {% endfor %}
         </div>

@@ -31,6 +31,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.content}"
+
+
 class FriendList(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='user', null=True)
     friends = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='friends')
@@ -62,7 +64,8 @@ class FriendList(models.Model):
 
 class FriendRequest(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='sender', null=True)
-    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='receiver', null=True)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='receiver',
+                                 null=True)
     is_active = models.BooleanField(blank=True, null=False, default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -86,3 +89,16 @@ class FriendRequest(models.Model):
     def cancel(self):
         self.is_active = False
         self.delete()
+
+
+class Messages(models.Model):
+    receiver = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='receiver2sender')
+    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sender2receiver')
+    pub_date = models.DateTimeField(default=timezone.now)
+    content = models.CharField(max_length=200)
+
+    def delete_message(self):
+        self.delete()
+
+    def __str__(self):
+        return f"{self.sender} to {self.receiver}: {self.content}"

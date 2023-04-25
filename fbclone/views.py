@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import NewUserForm, AvatarForm, PostForm, CommentForm
-from .models import Post, CustomUser, FriendRequest, FriendList, Comment
+from .forms import NewUserForm, AvatarForm, PostForm, CommentForm, MessageForm
+from .models import Post, CustomUser, FriendRequest, FriendList, Comment, Messages
 
 
 def index(request):
@@ -47,8 +47,24 @@ def register_request(request):
     return render(request, "register.html", {"register_form": form})
 
 
-def messenger(request):
-    return render(request, "messenger.html")
+def messenger(request, user_id):
+    users = CustomUser.objects.all()
+    selected_user = get_object_or_404(CustomUser, pk=user_id)
+    messages = Messages.objects.all()
+
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.receiver = selected_user
+            form.sender = request.user
+            form.save()
+
+    form = MessageForm()
+    return render(request, "messenger.html", {'form': form,
+                                              'selected_user': selected_user,
+                                              'users': users,
+                                              'messages': messages})
 
 
 def logout_request(request):

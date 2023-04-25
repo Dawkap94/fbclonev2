@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import CustomUser, Post, Comment
+from .models import CustomUser, Post, Comment, Messages
 
 
 class NewUserForm(UserCreationForm):
@@ -66,3 +66,12 @@ class EditUserInfoForm(forms.ModelForm):
         'Last_Name': forms.TextInput(attrs={'class': 'form-control',
                                             'placeholder': f'Tutaj nazwisko'}),
     }
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Messages
+        fields = ['content']
+        labels = {'content': ''}
+        widgets = {'content': forms.TextInput(attrs={'class': 'form-control',
+                                                     'placeholder': 'Type your message'})}
