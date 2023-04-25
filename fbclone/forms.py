@@ -1,7 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 
-from .models import CustomUser, Post
+from .models import CustomUser, Post, Comment
 
 
 class NewUserForm(UserCreationForm):
@@ -45,6 +45,15 @@ class PostForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'class': 'form-control',
                                              'placeholder': "What's on your mind?"}),
         }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        labels = {'content': ""}
+        widgets = {'content': forms.TextInput(attrs={'class': 'form-control',
+                                         'placeholder': 'Add your comment'})}
 
 
 class EditUserInfoForm(forms.ModelForm):

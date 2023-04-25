@@ -6,10 +6,9 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
-from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import NewUserForm, AvatarForm, PostForm
-from .models import Post, CustomUser, FriendRequest, FriendList
+from .forms import NewUserForm, AvatarForm, PostForm, CommentForm
+from .models import Post, CustomUser, FriendRequest, FriendList, Comment
 
 
 def index(request):
@@ -75,6 +74,7 @@ def create_post(request):
         user = request.user
         try:
             friend_list = FriendList.objects.get(user=user)
+            comments = Comment.objects.all()
             friend_ids = [friend.id for friend in friend_list.friends.all()] + [request.user.id]
             posts = Post.objects.filter(author__id__in=friend_ids).order_by('-pub_date')
             all_friends = friend_list.friends.all()
@@ -87,11 +87,14 @@ def create_post(request):
             posts = []
             all_friends = []
             suggested_friend = []
+            comments = []
     else:
         all_friends = []
         posts = []
         suggested_friend = []
+        comments = []
     if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -99,9 +102,19 @@ def create_post(request):
             post.author = author
             post.save()
             return redirect('mainpage')
+        elif comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            author = CustomUser.objects.get(username=request.user.username)
+            comment.author = author
+            comment.post_id = request.POST.get('post_id')
+            comment.save()
+            return redirect('mainpage')
     else:
         form = PostForm()
+        comment_form = CommentForm()
     return render(request, 'create_post.html', {'form': form,
+                                                'comments': comments,
+                                                'comment_form': comment_form,
                                                 'posts': posts,
                                                 'all_friends': all_friends,
                                                 'suggested_friend': suggested_friend})

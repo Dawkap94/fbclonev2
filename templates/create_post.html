@@ -51,19 +51,53 @@
                                         <a href="/user/{{elem.author.id}}"><b>{{elem.author.first_name}}</b></a>
                                         made a post.
                                     </div>
-                                    <h6 class="text-muted time">{{elem.pub_date}}</h6>
+                                    <h6 class="text-muted time">{{elem.pub_date | timesince}}</h6>
                                 </div>
                             </div>
                             <div class="post-description">
                                 <p><b>{{elem.title}}</b><br>"{{elem.content}}"</p>
                             </div>
                             <div class="post-footer">
-                                <div class="input-group">
-                                    <input class="form-control" placeholder="Add a comment" type="text">
-                                    <span class="input-group-addon">
-                                        <a href="#"><i class="fa fa-edit"></i></a>
-                                    </span>
-                                </div>
+                                <ul class="fb-comments">
+                                    <hr>
+                                    {% for comment in comments %}
+                                        {% if comment.post.id == elem.id %}
+                                            <li>
+                                              <a href="#" class="cmt-thumb">
+                                                <img alt="Avatar" class="img-md img-circle img-border mar-btm commentAvatar"
+                                                     src="{{ comment.author.avatar.url }}">
+                                              </a>
+                                                <div class="cmt-details">
+                                                    <a href="{% url 'profile' user_id=comment.author.id%}">{{comment.author.first_name}} {{comment.author.last_name}}</a>
+                                                    <span> {{comment.content}} </span>
+                                                    <p> {{comment.pub_date | timesince }} <a href="#" class="like-link">Like</a></p>
+                                                </div>
+                                            </li>
+                                            <hr>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    <li class="comment">
+                                        <div class="comment-wrapper">
+                                            <div class="avatar-wrapper">
+                                                <a href="#" class="cmt-thumb">
+                                                    <img alt="Avatar" class="img-md img-circle img-border mar-btm commentAvatar"
+                                                        src="{{ request.user.avatar.url }}">
+                                                </a>
+                                            </div>
+                                            <div class="form-wrapper">
+                                                <div class="cmt-form">
+                                                    <form method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="post_id" value="{{ elem.id }}">
+                                                        {{comment_form}}
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                 </div>

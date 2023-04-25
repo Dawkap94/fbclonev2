@@ -23,6 +23,14 @@ class Post(models.Model):
         return f"{self.author}, {self.title}, {self.pub_date}, {self.content}"
 
 
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    pub_date = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f"{self.content}"
 class FriendList(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='user', null=True)
     friends = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='friends')
@@ -78,5 +86,3 @@ class FriendRequest(models.Model):
     def cancel(self):
         self.is_active = False
         self.delete()
-
-
