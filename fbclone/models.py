@@ -96,6 +96,7 @@ class Messages(models.Model):
     sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sender2receiver')
     pub_date = models.DateTimeField(default=timezone.now)
     content = models.CharField(max_length=200)
+    read = models.BooleanField(default=False)
 
     def delete_message(self):
         self.delete()

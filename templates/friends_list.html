@@ -33,7 +33,43 @@
             <div class="col-md-3">
                 <div class="panel text-center">
                     <a href="{% url 'profile' user_id=elem.id %}">
-                    <div class="panel-body">
+                    <div class="panel-body" style="background-color:#f0f0f0;">
+                        {% if elem.avatar %}
+                      <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ elem.avatar.url }}" height="100px" width="100px">
+                        {% else %}
+                        No photo
+                        {% endif %}
+                      <h4 class="mar-no">
+                          {% if elem.first_name %}
+                          {{elem.first_name}} {{elem.last_name}}
+                          {% else %}
+                          ADMIN
+                          {% endif %}
+                      </h4>
+                    </div>
+                    </a>
+                <div class="pad-all">
+                  <div class="pad-btm">
+                  <a href="{% url 'profile' user_id=elem.id %}timeline"><button class="btn btn-primary">See timeline</button></a>
+                  <a href="{% url 'messenger' user_id=elem.id %}"><button class="btn btn-success">Message</button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+        </div>
+        <p></p>
+        <div class="friendsList">
+            <h2>Looking for more friends? Check this users:</h2>
+            <hr>
+            <div class="row bootstrap snippets bootdeys">
+            {% for elem in all_users %}
+            {% if elem.username != request.user.username and elem.username not in friend_list and elem.first_name %}
+            <div class="col-md-3">
+                <div class="panel text-center">
+                    <a href="{% url 'profile' user_id=elem.id %}">
+                    <div class="panel-body" style="background-color:#f0f0f0;">
                         {% if elem.avatar %}
                       <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ elem.avatar.url }}" height="100px" width="100px">
                         {% else %}
@@ -44,8 +80,8 @@
                     </a>
                 <div class="pad-all">
                   <div class="pad-btm">
-                    <button class="btn btn-primary">See timeline</button>
-                    <button class="btn btn-success">Message</button>
+                      <a href="{% url 'profile' user_id=elem.id %}timeline"><button class="btn btn-primary">See timeline</button></a>
+                      <a href="{% url 'messenger' user_id=elem.id %}"><button class="btn btn-success">Message</button></a>
                   </div>
                 </div>
               </div>
@@ -55,38 +91,5 @@
         </div>
     </div>
     <p></p>
-    <div class="friendsList">
-        <h2>Looking for more friends? Check this users:</h2>
-        <hr>
-        <div class="row bootstrap snippets bootdeys">
-        {% for elem in all_users %}
-        {% if elem.username != request.user.username and elem.username not in friend_list %}
-        <div class="col-md-3">
-            <div class="panel text-center">
-                <a href="{% url 'profile' user_id=elem.id %}">
-                <div class="panel-body">
-                    {% if elem.avatar %}
-                  <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ elem.avatar.url }}" height="100px" width="100px">
-                    {% else %}
-                    No photo
-                    {% endif %}
-                  <h4 class="mar-no">{{elem.first_name}} {{elem.last_name}}</h4>
-                </div>
-                </a>
-            <div class="pad-all">
-              <div class="pad-btm">
-                  <a href="{% url 'profile' user_id=elem.id %}timeline"><button class="btn btn-primary">See timeline</button></a>
-                <button class="btn btn-success">Message</button>
-              </div>
-            </div>
-          </div>
-    </div>
-        {% endif %}
-    {% endfor %}
-    </div>
-</div>
-    <p></p>
-
-
 </body>
 </html>

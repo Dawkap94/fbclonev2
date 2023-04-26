@@ -11,37 +11,36 @@
 <p></p>
 {% block content %}
 <div class="container">
-  <div class="friendsList">
-  <h2>Received Requests:</h2>
-  <hr>
-  <div class="row bootstrap snippets bootdeys">
-  {% if received_requests %}
-    <ul>
-      {% for request in received_requests %}
-        <div class="friendRequests">
-          <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ request.sender.avatar.url }}" height="100px" width="100px"><br>
-          {{ request.sender.username }}
-          <div class="col-md-3">
-            <form method="post" action="{% url 'accept_friend_request' request.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-success"><img src="https://icon-library.com/images/tick-icon/tick-icon-27.jpg"
-              height="15" width="15"></button>
-            </form>
-            <form method="post" action="{% url 'decline_friend_request' request.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-danger"><img src="https://icon-library.com/images/no-icon-png/no-icon-png-27.jpg"
-              height="15" width="15"></button>
-            </form>
+  <div class="container">
+    <div class="friendsList">
+      <h2>Received Requests:</h2>
+      <hr>
+      <div class="row bootstrap snippets bootdeys">
+      {% if received_requests %}
+          {% for request in received_requests %}
+            <div class="friendRequests">
+              <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ request.sender.avatar.url }}" height="100px" width="100px"><br>
+              {{ request.sender.username }}
+              <div class="col-md-3 d-flex">
+                <form method="post" action="{% url 'accept_friend_request' request.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-success"><img src="https://icon-library.com/images/tick-icon/tick-icon-27.jpg"
+                  height="15" width="15"></button>
+                </form>
+                <form method="post" action="{% url 'decline_friend_request' request.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger"><img src="https://icon-library.com/images/no-icon-png/no-icon-png-27.jpg"
+                  height="15" width="15"></button>
+                </form>
+                </div>
             </div>
+          {% endfor %}
+      {% else %}
+        <div class="col-md-3">
+              You have no friend requests.
         </div>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <div class="col-md-3">
-          You have no friend requests.
+      </div>
     </div>
-  </div>
-
   {% endif %}
   </div>
 </div>

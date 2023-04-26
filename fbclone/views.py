@@ -9,6 +9,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import NewUserForm, AvatarForm, PostForm, CommentForm, MessageForm
 from .models import Post, CustomUser, FriendRequest, FriendList, Comment, Messages
 
+from django.core.cache import cache
+
 
 def index(request):
     form = AvatarForm(instance=request.user)
@@ -48,7 +50,10 @@ def register_request(request):
 
 
 def messenger(request, user_id):
+    corecache = cache
     users = CustomUser.objects.all()
+    friends = FriendList.objects.get(user=request.user)
+
     selected_user = get_object_or_404(CustomUser, pk=user_id)
     messages = Messages.objects.all()
 
@@ -62,8 +67,10 @@ def messenger(request, user_id):
 
     form = MessageForm()
     return render(request, "messenger.html", {'form': form,
+                                              'cache': cache,
                                               'selected_user': selected_user,
                                               'users': users,
+                                              'friends': friends.friends.all(),
                                               'messages': messages})
 
 

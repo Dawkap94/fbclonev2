@@ -8,6 +8,13 @@
     height: 75%;
 }
 
+
+.links{
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+}
+
+
 #Avatar{
     border-radius: 50%;
     height: 35px;
