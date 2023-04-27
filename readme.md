@@ -13,7 +13,7 @@ The application is a copy of a well-known social network. With this application 
 
 
 # To do
-- [ ] adding groups
+- [ ] add groups
 - [ ] hard work on the frontend
 
 #End
