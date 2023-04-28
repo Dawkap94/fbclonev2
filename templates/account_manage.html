@@ -12,15 +12,17 @@
 {% include 'base.html' %}
 
 {% block content %}
-
+<p></p>
+<h3>{{user.username}}'s account manage</h3>
+<p></p>
         <div class="row">
             <div class="col-4">
                 TUTAJ BEDZIE GRUPY ETC
             </div>
             <div class="col-5">
-                <h3>{{user.username}}'s account manage</h3>
                     {% if user.avatar %}
-                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}'s avatar" id="avatar">
+                    Your profile picture:
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}'s avatar" id="avatar" width="250" height="250">
                     {% else %}
                     <p>{{user.username}} does not have any avatar yet.</p>
                     {% endif %}
@@ -36,6 +38,7 @@
                 TUTAJ BEDA ZNAJOMI
             </div>
         </div>
+<p></p>
 {% endblock %}
 </body>
 </html>

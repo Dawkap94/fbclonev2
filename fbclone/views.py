@@ -14,7 +14,8 @@ from django.core.cache import cache
 
 def index(request):
     form = AvatarForm(instance=request.user)
-    return render(request, "base.html")
+    unread_messages = Messages.objects.filter(receiver=request.user, read=False)
+    return render(request, "base.html", {"unread_messages": unread_messages})
 
 
 def login_page(request):
@@ -50,12 +51,15 @@ def register_request(request):
 
 
 def messenger(request, user_id):
-    corecache = cache
     users = CustomUser.objects.all()
     friends = FriendList.objects.get(user=request.user)
 
     selected_user = get_object_or_404(CustomUser, pk=user_id)
     messages = Messages.objects.all()
+    unread_messages = messages.filter(receiver=request.user, read=False)
+    for message in unread_messages:
+        message.read = True
+        message.save()
 
     if request.method == "POST":
         form = MessageForm(request.POST)
@@ -67,11 +71,18 @@ def messenger(request, user_id):
 
     form = MessageForm()
     return render(request, "messenger.html", {'form': form,
-                                              'cache': cache,
                                               'selected_user': selected_user,
                                               'users': users,
+                                              'unread_messages': unread_messages,
                                               'friends': friends.friends.all(),
                                               'messages': messages})
+
+
+def delete_message(request, message_id):
+    message = get_object_or_404(Messages, pk=message_id)
+    if message.sender == request.user or message.receiver == request.user:
+        message.delete()
+    return redirect('messenger', user_id=message.receiver.id)
 
 
 def logout_request(request):
@@ -92,6 +103,7 @@ def account_management(request):
 
 
 def create_post(request):
+    unread_messages = Messages.objects.filter(receiver=request.user, read=False)
     if request.user.is_authenticated:
         user = request.user
         try:
@@ -135,6 +147,7 @@ def create_post(request):
         form = PostForm()
         comment_form = CommentForm()
     return render(request, 'create_post.html', {'form': form,
+                                                'unread_messages': unread_messages,
                                                 'comments': comments,
                                                 'comment_form': comment_form,
                                                 'posts': posts,
@@ -142,8 +155,8 @@ def create_post(request):
                                                 'suggested_friend': suggested_friend})
 
 
-@login_required
 def friends(request):
+    unread_messages = Messages.objects.filter(receiver=request.user, read=False)
     user = request.user
     try:
         friend_list = FriendList.objects.get(user=user)
@@ -158,6 +171,7 @@ def friends(request):
 
     all_users = CustomUser.objects.all()
     return render(request, "friends_list.html", {"friends": friends,
+                                                 "unread_messages": unread_messages,
                                                  "all_users": all_users,
                                                  'received_requests': received_requests,
                                                  'sent_requests': sent_requests,
@@ -167,6 +181,7 @@ def friends(request):
 
 
 def profile(request, user_id):
+    unread_messages = Messages.objects.filter(receiver=request.user, read=False)
     User = get_user_model()
     user = get_object_or_404(CustomUser, pk=user_id)
     friend = get_object_or_404(User, id=user_id)
@@ -182,6 +197,7 @@ def profile(request, user_id):
     else:
         sent = False
     return render(request, 'profile.html', {'user': user,
+                                            'unread_messages': unread_messages,
                                             'sent': sent,
                                             'friend_list': all_friends})
 
@@ -292,6 +308,22 @@ def user_timeline(request, user_id):
                                              'comments': comments,
                                              'user': user,
                                              'sent': sent})
+
+
+def user_about(request, user_id):
+    current_user = request.user
+    user = get_object_or_404(CustomUser, pk=user_id)
+
+    User = get_user_model()
+    if FriendRequest.objects.filter(sender=current_user, receiver=user, is_active=True).exists():
+        sent = True
+    else:
+        sent = False
+    user = get_object_or_404(CustomUser, pk=user_id)
+    return render(request, 'about.html', {'about': user.user_about,
+                                          'birth_date': user.birth_date,
+                                          'user': user,
+                                          'sent': sent})
 
 
 def search_results(request):

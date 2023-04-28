@@ -25,10 +25,23 @@ class NewUserForm(UserCreationForm):
         return user
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class AvatarForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['avatar']
+        fields = ['avatar', 'birth_date', 'user_about']
+        labels = {
+            "birth_date": "Your date of birth:",
+            "content": ""
+        }
+        widgets = {
+            'birth_date': DateInput(),
+            'user_about': forms.Textarea(attrs={'class': 'form-control',
+                                             'placeholder': "Write somthing about yourself"}),
+        }
 
 
 class PostForm(forms.ModelForm):

@@ -35,9 +35,8 @@
 							{% else %}
 								<a href="{% url 'messenger' user_id=person.id %}" class="list-group-item list-group-item-action border-0" id="{{person.id}}"">
 							{% endif %}
-		<!--						<div class="badge bg-success float-right">5</div>-->
 									<div class="d-flex align-items-start" >
-									<img src="{{person.avatar.url}}" class="rounded-circle mr-1" alt="Vanessa Tucker" width="40" height="40">
+									<img src="{{person.avatar.url}}" class="rounded-circle mr-1" alt="{{person.username}}" width="40" height="40">
 									<div class="flex-grow-1 ml-3">
 										{% if person.first_name and person.last_name %}
 										{{person.first_name}} {{person.last_name}}
@@ -57,7 +56,7 @@
 					<div class="py-2 px-4 border-bottom d-none d-lg-block">
 						<div class="d-flex align-items-center py-1">
 							<div class="position-relative">
-								<img src="{{selected_user.avatar.url}}" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+								<img src="{{selected_user.avatar.url}}" class="rounded-circle mr-1" alt="{{selected_user.username}}" width="40" height="40">
 							</div>
 							<div class="flex-grow-1 pl-3">
 								<strong>
@@ -80,7 +79,7 @@
 						<div class="chat-messages p-4">
 							{% if messages %}
 								{% for message in messages %}
-									{% if message.sender == request.user and message.receiver == selected_user%}
+									{% if message.sender == request.user and message.receiver == selected_user %}
 									<div class="chat-message-right pb-4">
 										<div>
 											<img src="{{user.avatar.url}}" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
@@ -89,6 +88,10 @@
 										<div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
 											<div class="font-weight-bold mb-1">You</div>
 												{{message.content}}
+											<form class="deleteMessageForm" method="post" action="{% url 'delete_message' message.id %}">
+												{% csrf_token %}
+            									<button type="submit" class="btn-primary-outline border-0 text-muted small">Delete</button>
+        									</form>
 										</div>
 									</div>
 									{% endif %}
@@ -101,6 +104,10 @@
 										<div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
 											<div class="font-weight-bold mb-1">{{selected_user.first_name}} {{selected_user.last_name}}</div>
 											{{message.content}}
+											<form class="deleteMessageForm" method="post" action="{% url 'delete_message' message.id %}">
+												{% csrf_token %}
+            									<button type="submit" class="btn-primary-outline border-0 text-muted small">Delete</button>
+        									</form>
 										</div>
 									</div>
 									{% endif %}

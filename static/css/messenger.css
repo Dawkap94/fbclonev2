@@ -55,3 +55,12 @@ body{margin-top:20px;}
 #form {
     width: 300%;
 }
+
+
+.deleteMessageForm{
+    opacity:0;
+}
+
+.deleteMessageForm:hover{
+    opacity:1;
+}

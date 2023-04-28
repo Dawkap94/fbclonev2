@@ -337,3 +337,20 @@ max-height:280px;
 .form-wrapper {
     flex: 1;
 }
+
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%,-50%);
+  font-size: 12px;
+  font-weight: 400;
+  padding: 0.25em 0.4em;
+  border-radius: 10px;
+  line-height: 1;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+}

@@ -25,6 +25,7 @@ urlpatterns = [
     path('login/', views.login_page, name="login"),
     path('register/', views.register_request, name="register"),
     path('messenger/<int:user_id>/', views.messenger, name="messenger"),
+    path('messenger/delete_message/<int:message_id>/', views.delete_message, name='delete_message'),
     path('logout/', views.logout_request, name="logout"),
     path('account_management/', views.account_management, name="account"),
     path('friends/', views.friends, name="friends"),
@@ -38,6 +39,7 @@ urlpatterns = [
     path('cancel-friend-request/<int:friend_request_id>/', views.cancel_friend_request, name='cancel_friend_request'),
     path('user/<int:user_id>/friends/', views.user_friends, name='user_friends'),
     path('user/<int:user_id>/timeline/', views.user_timeline, name='user_timeline'),
+    path('user/<int:user_id>/about/', views.user_about, name='user_about'),
     path('search_results/', views.search_results, name='search_results'),
 ]
 

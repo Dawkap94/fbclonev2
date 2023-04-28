@@ -7,7 +7,9 @@ from django.conf import settings
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
     about = models.CharField(max_length=300, blank=True, null=True)
-    birth_date = models.CharField(max_length=20, blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    user_about = models.CharField(max_length=500, blank=True, null=True)
+    favourite_movies = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return f"{self.username}"
@@ -18,9 +20,15 @@ class Post(models.Model):
     content = models.TextField()
     pub_date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    likes = models.ManyToManyField(CustomUser, related_name="liked_posts", through="Like")
 
     def __str__(self):
         return f"{self.author}, {self.title}, {self.pub_date}, {self.content}"
+
+
+class Like(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
 
 class Comment(models.Model):
