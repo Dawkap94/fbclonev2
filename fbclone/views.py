@@ -14,8 +14,12 @@ from django.core.cache import cache
 
 def index(request):
     form = AvatarForm(instance=request.user)
-    unread_messages = Messages.objects.filter(receiver=request.user, read=False)
-    return render(request, "base.html", {"unread_messages": unread_messages})
+    try:
+        unread_messages = Messages.objects.filter(receiver=request.user, read=False)
+        return render(request, "base.html", {"unread_messages": unread_messages})
+    except TypeError:
+        unread_messages = []
+        return render(request, "base.html", {"unread_messages": unread_messages})
 
 
 def login_page(request):
@@ -52,8 +56,12 @@ def register_request(request):
 
 def messenger(request, user_id):
     users = CustomUser.objects.all()
-    friends = FriendList.objects.get(user=request.user)
-
+    try:
+        friends = FriendList.objects.get(user=request.user)
+        all_friends = friends.friends.all()
+    except:
+        friends = []
+        all_friends = []
     selected_user = get_object_or_404(CustomUser, pk=user_id)
     messages = Messages.objects.all()
     unread_messages = messages.filter(receiver=request.user, read=False)
@@ -74,7 +82,7 @@ def messenger(request, user_id):
                                               'selected_user': selected_user,
                                               'users': users,
                                               'unread_messages': unread_messages,
-                                              'friends': friends.friends.all(),
+                                              'friends': all_friends,
                                               'messages': messages})
 
 
@@ -103,7 +111,6 @@ def account_management(request):
 
 
 def create_post(request):
-    unread_messages = Messages.objects.filter(receiver=request.user, read=False)
     if request.user.is_authenticated:
         user = request.user
         try:
@@ -113,20 +120,23 @@ def create_post(request):
             posts = Post.objects.filter(author__id__in=friend_ids).order_by('-pub_date')
             all_friends = friend_list.friends.all()
             not_friends = [person for person in CustomUser.objects.all() if
-                           person not in all_friends and person != user]
+                           person not in all_friends and person != user and person.username != 'potezny-admin']
             suggested_friend = random.choice(not_friends)
+            unread_messages = Messages.objects.filter(receiver=request.user, read=False)
         except:
             friend_list = []
             friend_ids = []
             posts = []
             all_friends = []
-            suggested_friend = []
+            suggested_friend = random.choice([user for user in CustomUser.objects.all() if user.username != 'potezny-admin'])
             comments = []
+            unread_messages = []
     else:
         all_friends = []
         posts = []
-        suggested_friend = []
+        suggested_friend = random.choice([user for user in CustomUser.objects.all() if user.username != 'potezny-admin'])
         comments = []
+        unread_messages = []
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         form = PostForm(request.POST)
