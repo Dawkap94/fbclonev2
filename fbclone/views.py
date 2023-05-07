@@ -128,13 +128,13 @@ def create_post(request):
             friend_ids = []
             posts = []
             all_friends = []
-            suggested_friend = random.choice([user for user in CustomUser.objects.all() if user.username != 'potezny-admin'])
+            suggested_friend = []
             comments = []
             unread_messages = []
     else:
         all_friends = []
         posts = []
-        suggested_friend = random.choice([user for user in CustomUser.objects.all() if user.username != 'potezny-admin'])
+        suggested_friend = []
         comments = []
         unread_messages = []
     if request.method == 'POST':
