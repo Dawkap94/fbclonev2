@@ -1,0 +1,41 @@
+.userAvatar {
+    border-radius: 50%;
+    height: 100px;
+    object-fit: cover;
+    object-position: center;
+    width: 100px;
+}
+
+.friendRequests {
+  font-family: arial;
+  font-size: 24px;
+  margin: 25px;
+  width: 100px;
+  height: 200px;
+  text-align: center;
+}
+
+.inline{
+    display:inline-block;
+}
+
+.friendAvatar {
+    border-radius: 50%;
+    height: 25px;
+    object-fit: cover;
+    object-position: center;
+    width: 25px;
+}
+
+
+.friendsList{
+    padding: 15px;
+    border-top: thin;
+    background-color: #f0f0f0;
+    border-left: thin;
+    border-bottom: thin;
+}
+
+.timelinePost{
+    margin-bottom: 5%;
+}
