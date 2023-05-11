@@ -46,13 +46,13 @@ def register_request(request):
         form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            FriendList.objects.create(user=user)
             login(request, user)
             messages.success(request, "Registration successful.")
             return redirect('mainpage')
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
     return render(request, "register.html", {"register_form": form})
-
 
 def messenger(request, user_id):
     users = CustomUser.objects.all()
