@@ -30,7 +30,7 @@
             <div class="fb-profile-block">
                 <div class="fb-profile-block-thumb cover-container"></div>
                 <div class="profile-img">
-                    <a href="{% url 'account' %}">
+                    <a href="{{ user.avatar.url }}">
                         {% if user.avatar %}
                         <img src="{{ user.avatar.url }}" alt="" title="">
                         {% else %}
