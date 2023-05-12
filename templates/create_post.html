@@ -122,29 +122,37 @@
         <p></p>
         <div class="FriendsDiv">
             <h5>Suggested friend:</h5>
-            <img alt="Avatar" class="img-md img-circle img-border mar-btm suggestedFriend"
-                 src="{{ suggested_friend.avatar.url }}"><a href="/user/{{suggested_friend.id}}"> {{suggested_friend.first_name}} {{suggested_friend.last_name}}</a>
-            <p></p>
-            <a href="{% url 'friends'%}">More</a>
+	    {% if request.user.is_authenticated %}
+                <img alt="Avatar" class="img-md img-circle img-border mar-btm suggestedFriend"
+                     src="{{ suggested_friend.avatar.url }}"><a href="/user/{{suggested_friend.id}}"> {{suggested_friend.first_name}} {{suggested_friend.last_name}}</a>
+                <p></p>
+                <a href="{% url 'friends'%}">More</a>
+	    {% else %}
+                <a href="{% url 'register' %}">Register to see suggested friends!</a>
+	    {% endif %}
         </div>
         <p></p>
 
         <div class="FriendsDiv2">
         <h5>Your friends:</h5>
-        {% for friend in all_friends %}
-        <li>
-            <a href="/user/{{friend.id}}">
-                <img alt="Avatar" class="img-md img-circle img-border mar-btm friendAvatar"
-                     src="{{ friend.avatar.url }}">
-                {% if friend.first_name %}
-                {{friend.first_name}} {{friend.last_name}}
-                {% else %}
-                ADMIN
-                {% endif%}
-                </a>
-        </li>
-        {% endfor %}
+        {% if request.user.is_authenticated %}
+            {% for friend in all_friends %}
+            <li>
+                <a href="/user/{{friend.id}}">
+                    <img alt="Avatar" class="img-md img-circle img-border mar-btm friendAvatar"
+                         src="{{ friend.avatar.url }}">
+                    {% if friend.first_name %}
+                    {{friend.first_name}} {{friend.last_name}}
+                    {% else %}
+                    ADMIN
+                    {% endif%}
+                    </a>
+            </li>
+	    {% endfor %}
+        {% else %}
+	    <a href="{% url 'register' %}">Not registered? Register now! </a>
         </div>
+	{% endif %}
     </div>
 </div>
 {% endblock %}
