@@ -122,14 +122,18 @@
         <p></p>
         <div class="FriendsDiv">
             <h5>Suggested friend:</h5>
+	    {% if request.user.is_authenticated %}
             {% if request.user.is_authenticated %}
                 <img alt="Avatar" class="img-md img-circle img-border mar-btm suggestedFriend"
                      src="{{ suggested_friend.avatar.url }}"><a href="/user/{{suggested_friend.id}}"> {{suggested_friend.first_name}} {{suggested_friend.last_name}}</a>
                 <p></p>
                 <a href="{% url 'friends'%}">More</a>
-            {% else %}
+	          {% else %}
+                <a href="{% url 'register' %}">Register to see suggested friends!</a>
+	          {% endif %}
+      {% else %}
                 <a href="{% url 'register'%}">Register to see suggested friends!</a>
-            {% endif %}
+      {% endif %}
         </div>
         <p></p>
 
@@ -148,11 +152,12 @@
                     {% endif%}
                     </a>
             </li>
-            {% endfor %}
+	          {% endfor %}
         {% else %}
-            <a href="{% url 'register' %}">Not registered? Register now!</a>
+	        <a href="{% url 'register' %}">Not registered? Register now! </a>
         {% endif %}
         </div>
+	{% endif %}
     </div>
 </div>
 {% endblock %}
