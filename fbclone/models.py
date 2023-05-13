@@ -6,7 +6,6 @@ from django.conf import settings
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
-    about = models.CharField(max_length=300, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
     user_about = models.CharField(max_length=500, blank=True, null=True)
     favourite_movies = models.CharField(max_length=500, blank=True, null=True)

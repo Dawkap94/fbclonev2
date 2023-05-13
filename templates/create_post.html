@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="pull-left meta">
                                     <div class="title h5">
-                                        <a href="/user/{{elem.author.id}}"><b>
+                                        <a href="/user/{{elem.author.id}}" class="text-decoration-none"><b>
                                             {% if elem.author.first_name %}
                                             {{elem.author.first_name}}
                                             {% else %}
@@ -78,7 +78,7 @@
                                                      src="{{ comment.author.avatar.url }}">
                                               </a>
                                                 <div class="cmt-details">
-                                                    <a href="{% url 'profile' user_id=comment.author.id%}">{{comment.author.first_name}} {{comment.author.last_name}}</a>
+                                                    <a href="{% url 'profile' user_id=comment.author.id%}" class="text-decoration-none">{{comment.author.first_name}} {{comment.author.last_name}}</a>
                                                     <span> {{comment.content}} </span>
                                                     <p> {{comment.pub_date | timesince }} <a href="#" class="like-link">Like</a></p>
                                                 </div>
@@ -122,18 +122,14 @@
         <p></p>
         <div class="FriendsDiv">
             <h5>Suggested friend:</h5>
-	    {% if request.user.is_authenticated %}
             {% if request.user.is_authenticated %}
                 <img alt="Avatar" class="img-md img-circle img-border mar-btm suggestedFriend"
-                     src="{{ suggested_friend.avatar.url }}"><a href="/user/{{suggested_friend.id}}"> {{suggested_friend.first_name}} {{suggested_friend.last_name}}</a>
+                     src="{{ suggested_friend.avatar.url }}"><a href="/user/{{suggested_friend.id}}" class="text-decoration-none"> {{suggested_friend.first_name}} {{suggested_friend.last_name}}</a>
                 <p></p>
-                <a href="{% url 'friends'%}">More</a>
+                <a href="{% url 'friends'%}" class="text-decoration-none">More</a>
 	          {% else %}
-                <a href="{% url 'register' %}">Register to see suggested friends!</a>
+                <a href="{% url 'register' %}" class="text-decoration-none">Register to see suggested friends!</a>
 	          {% endif %}
-      {% else %}
-                <a href="{% url 'register'%}">Register to see suggested friends!</a>
-      {% endif %}
         </div>
         <p></p>
 
@@ -142,22 +138,21 @@
         {% if request.user.is_authenticated %}
             {% for friend in all_friends %}
             <li>
-                <a href="/user/{{friend.id}}">
+                <a href="/user/{{friend.id}}" class="text-decoration-none">
                     <img alt="Avatar" class="img-md img-circle img-border mar-btm friendAvatar"
                          src="{{ friend.avatar.url }}">
-                    {% if friend.first_name %}
+                {% if friend.first_name %}
                     {{friend.first_name}} {{friend.last_name}}
-                    {% else %}
+                {% else %}
                     ADMIN
-                    {% endif%}
+                {% endif%}
                     </a>
             </li>
-	          {% endfor %}
+	        {% endfor %}
         {% else %}
-	        <a href="{% url 'register' %}">Not registered? Register now! </a>
+	        <a href="{% url 'register' %}" class="text-decoration-none">Not registered? Register now! </a>
         {% endif %}
         </div>
-	{% endif %}
     </div>
 </div>
 {% endblock %}

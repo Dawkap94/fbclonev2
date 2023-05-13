@@ -354,3 +354,13 @@ max-height:280px;
 .badge-danger {
   background-color: #dc3545;
 }
+
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+}
+
+.collapse.navbar-collapse {
+  display: flex !important;
+  flex-basis: auto;
+}

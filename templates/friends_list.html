@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Friends List</title>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/friends_list.css'%}">
 
 </head>
@@ -33,7 +33,7 @@
             {% if elem.username != request.user.username and elem.username in friend_list %}
             <div class="col-md-3">
                 <div class="panel text-center">
-                    <a href="{% url 'profile' user_id=elem.id %}">
+                    <a href="{% url 'profile' user_id=elem.id %}" class="text-decoration-none">
                     <div class="panel-body" style="background-color:#f0f0f0;">
                         {% if elem.avatar %}
                       <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ elem.avatar.url }}" height="100px" width="100px">
@@ -69,7 +69,7 @@
             {% if elem.username != request.user.username and elem.username not in friend_list and elem.first_name %}
             <div class="col-md-3">
                 <div class="panel text-center">
-                    <a href="{% url 'profile' user_id=elem.id %}">
+                    <a href="{% url 'profile' user_id=elem.id %}" class="text-decoration-none">
                     <div class="panel-body" style="background-color:#f0f0f0;">
                         {% if elem.avatar %}
                       <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ elem.avatar.url }}" height="100px" width="100px">

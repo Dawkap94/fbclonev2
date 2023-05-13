@@ -1,22 +1,35 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from .models import CustomUser, Post, Comment, Messages
 
 
 class NewUserForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+    password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'type': 'password', 'name': 'password1', 'placeholder': 'Password'}),
+        label='Enter your password')
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'type': 'password', 'name': 'password2', 'placeholder': 'Password Confirmation'}),
+        label='Confirm your password')
 
     class Meta:
         model = CustomUser
-        fields = ("username", "first_name", "last_name", "email", "password1", "password2")
+        fields = ("username", "first_name", "last_name", "email")
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control',
                                             'placeholder': 'Enter your username'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control',
                                              'placeholder': 'Enter your first name'}),
-        }
+            'last_name': forms.TextInput(attrs={'class': 'form-control',
+                                                 'placeholder': 'Enter your last name'}),
+            'email': forms.TextInput(attrs={'class': 'form-control',
+                                                 'placeholder': 'Enter your email'}),
+            'password1': forms.PasswordInput(attrs={'class': 'form-control',
+                                                     'placeholder': 'Enter your password'}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-control',
+                                                     'placeholder': 'Enter your password again'}),
 
+        }
     def save(self, commit=True):
         user = super(NewUserForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
@@ -72,7 +85,7 @@ class CommentForm(forms.ModelForm):
 class EditUserInfoForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = '__all__'  # or ['phone_number', 'Birthday', 'city', 'only_fields_you_want_to_edit']
+        fields = '__all__'
         widgets = {
         'Name': forms.TextInput(attrs={'class': 'form-control',
                                        'placeholder': f'Tutaj imie'}),
