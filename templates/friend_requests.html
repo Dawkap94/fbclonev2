@@ -20,7 +20,7 @@
           {% for request in received_requests %}
             <div class="friendRequests">
               <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ request.sender.avatar.url }}" height="100px" width="100px"><br>
-              {{ request.sender.username }}
+              {{ request.sender.first_name }} {{request.sender.last_name}}
               <div class="col-md-3 d-flex">
                 <form method="post" action="{% url 'accept_friend_request' request.id %}">
                   {% csrf_token %}
@@ -55,7 +55,8 @@
     <ul>
       {% for request in sent_requests %}
         <div class="friendRequests">
-          <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ request.receiver.avatar.url }}" height="100px" width="100px">
+          <a href="{% url 'profile' user_id=request.receiver.id %}">
+            <img alt="Avatar" class="img-md img-circle img-border mar-btm userAvatar" src="{{ request.receiver.avatar.url }}" height="100px" width="100px"></a>
           <form method="post" action="{% url 'cancel_friend_request' request.id %}">
             {% csrf_token %}
             <p></p>

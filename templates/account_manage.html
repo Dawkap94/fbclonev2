@@ -8,41 +8,35 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/account.css'%}">
+    <link rel="stylesheet" href="{% static 'css/friends_list.css'%}">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
 
 </head>
 <body>
 {% include 'base.html' %}
-
-{% block content %}
-<p></p>
-<h3>{{user.username}}'s account manage</h3>
-<p></p>
-        <div class="row">
-            <div class="col-4">
-                TUTAJ BEDZIE GRUPY ETC
-            </div>
-            <div class="col-5">
+    <p></p>
+    <div class="container">
+        <div class="friendsList">
+            <h2>{{user.first_name}} {{user.last_name}}'s account manage</h2>
+            <hr>
+            <div class="row bootstrap snippets bootdeys">
+                <ul>
                     {% if user.avatar %}
                     Your profile picture:
-                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}'s avatar" id="avatar" width="250" height="250">
+                     <img src="{{ user.avatar.url }}" alt="{{ user.username }}'s avatar" id="avatar" width="250" height="250">
                     {% else %}
                     <p>{{user.username}} does not have any avatar yet.</p>
                     {% endif %}
-
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <p></p>
                         <button class="btn btn-success" type="submit">Save</button>
                     </form>
-            </div>
-            <div class="col-3">
-                TUTAJ BEDA ZNAJOMI
+                 </ul>
             </div>
         </div>
-<p></p>
-{% endblock %}
+    </div>
 </body>
 </html>

@@ -64,3 +64,9 @@ body{margin-top:20px;}
 .deleteMessageForm:hover{
     opacity:1;
 }
+
+
+.list-group-item.list-group-item-action.border-0 {
+  margin: 5px;
+  padding-left: 10px;
+}

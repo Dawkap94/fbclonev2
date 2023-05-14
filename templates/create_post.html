@@ -90,7 +90,7 @@
                                     <li class="comment">
                                         <div class="comment-wrapper">
                                             <div class="avatar-wrapper">
-                                                <a href="#" class="cmt-thumb">
+                                                <a href="{% url 'profile' user_id=request.user.id%}" class="cmt-thumb">
                                                     <img alt="Avatar" class="img-md img-circle img-border mar-btm commentAvatar"
                                                         src="{{ request.user.avatar.url }}">
                                                 </a>

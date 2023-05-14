@@ -67,7 +67,7 @@
             <div class="row bootstrap snippets bootdeys">
             {% for elem in all_users %}
             {% if elem.username != request.user.username and elem.username not in friend_list and elem.first_name %}
-            <div class="col-md-3">
+            <div class="col-md-3" style="margin-top:10px;">
                 <div class="panel text-center">
                     <a href="{% url 'profile' user_id=elem.id %}" class="text-decoration-none">
                     <div class="panel-body" style="background-color:#f0f0f0;">
