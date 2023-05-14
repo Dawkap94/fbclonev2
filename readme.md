@@ -3,9 +3,11 @@
 The application is a copy of a well-known social network. With this application you can:
 - search for friends
 - set your profile picture
-- invite friends
-- see your friends list
+- invite friends to friendlist
+- see your and other users friends list
 - chat with other users
+- create posts
+- comment friends posts
 
 # Images
 
@@ -13,7 +15,9 @@ The application is a copy of a well-known social network. With this application 
 
 
 # To do
+- [X] red dot notification in messages icon
 - [ ] add groups
+- [ ] create like system
 - [ ] hard work on the frontend
 
-#End
+#Deployed to https://fbclone.bieda.it
