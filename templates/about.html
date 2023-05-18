@@ -41,9 +41,9 @@
                 </div>
                 <div class="profile-name">
                     {% if request.user.username == user.username %}
-                    <h2>Your profile: {{user.first_name}} {{user.last_name}} ({{user.username}})</h2>
+                    <h2>Your profile: {{user.first_name}} {{user.last_name}}</h2>
                     {% else %}
-                    <h2>{{user.first_name}} {{user.last_name}} ({{user.username}})</h2>
+                    <h2>{{user.first_name}} {{user.last_name}}</h2>
                         {% if sent == False and user.username not in friend_list %}
                             <a href="{% url 'add_friend' user.id %}"><button class="btn btn-secondary" >Send friend request</button></a>
                         {% elif sent == True and user.username not in friend_list %}

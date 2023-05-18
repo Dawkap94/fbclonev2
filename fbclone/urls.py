@@ -41,6 +41,11 @@ urlpatterns = [
     path('user/<int:user_id>/timeline/', views.user_timeline, name='user_timeline'),
     path('user/<int:user_id>/about/', views.user_about, name='user_about'),
     path('search_results/', views.search_results, name='search_results'),
+    path('like_post/<int:post_id>/', views.like_post, name='like_post'),
+    path('unlike_post/<int:post_id>/', views.unlike_post, name='unlike_post'),
+    path('like_comment/<int:comment_id>/', views.like_comment, name='like_comment'),
+    path('unlike_comment/<int:comment_id>/', views.unlike_comment, name='unlike_comment'),
+
 ]
 
 if settings.DEBUG:

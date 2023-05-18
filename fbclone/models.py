@@ -25,19 +25,21 @@ class Post(models.Model):
         return f"{self.author}, {self.title}, {self.pub_date}, {self.content}"
 
 
-class Like(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
-
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     pub_date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.CharField(max_length=250)
+    likes = models.ManyToManyField(CustomUser, related_name="liked_comments", through="Like")
 
     def __str__(self):
         return f"{self.content}"
+
+
+class Like(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
 
 
 class FriendList(models.Model):

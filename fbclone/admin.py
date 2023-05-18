@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import CustomUser, Post, FriendList, FriendRequest, Comment, Messages
+from .models import CustomUser, Post, FriendList, FriendRequest, Comment, Messages, Like
+
 # Register your models here.
 
 admin.site.register(CustomUser)
@@ -37,3 +38,4 @@ admin.site.register(FriendRequest, FriendRequestAdmin)
 
 admin.site.register(Comment)
 admin.site.register(Messages)
+admin.site.register(Like)

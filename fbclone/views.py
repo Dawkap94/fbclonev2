@@ -7,9 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import NewUserForm, AvatarForm, PostForm, CommentForm, MessageForm
-from .models import Post, CustomUser, FriendRequest, FriendList, Comment, Messages
-
-from django.core.cache import cache
+from .models import Post, CustomUser, FriendRequest, FriendList, Comment, Messages, Like
 
 
 def index(request):
@@ -53,6 +51,7 @@ def register_request(request):
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
     return render(request, "register.html", {"register_form": form})
+
 
 def messenger(request, user_id):
     users = CustomUser.objects.all()
@@ -114,6 +113,7 @@ def create_post(request):
     if request.user.is_authenticated:
         user = request.user
         try:
+            likes = Like.objects.all()
             friend_list = FriendList.objects.get(user=user)
             comments = Comment.objects.all()
             friend_ids = [friend.id for friend in friend_list.friends.all()] + [request.user.id]
@@ -131,12 +131,14 @@ def create_post(request):
             suggested_friend = []
             comments = []
             unread_messages = []
+            likes = []
     else:
         all_friends = []
         posts = []
         suggested_friend = []
         comments = []
         unread_messages = []
+        likes = []
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         form = PostForm(request.POST)
@@ -161,8 +163,37 @@ def create_post(request):
                                                 'comments': comments,
                                                 'comment_form': comment_form,
                                                 'posts': posts,
+                                                'likes': likes,
                                                 'all_friends': all_friends,
                                                 'suggested_friend': suggested_friend})
+
+
+def like_post(request, post_id):
+    like = Like()
+    like.user = request.user
+    like.post = Post.objects.get(id=post_id)
+    like.save()
+    return redirect('mainpage')
+
+
+def unlike_post(request, post_id):
+    like = Like.objects.get(post=Post.objects.get(id=post_id), user=request.user)
+    like.delete()
+    return redirect('mainpage')
+
+
+def like_comment(request, comment_id):
+    like = Like()
+    like.user = request.user
+    like.comment = Comment.objects.get(id=comment_id)
+    like.save()
+    return redirect('mainpage')
+
+
+def unlike_comment(request, comment_id):
+    like = Like.objects.get(comment=Comment.objects.get(id=comment_id), user=request.user)
+    like.delete()
+    return redirect('mainpage')
 
 
 def friends(request):

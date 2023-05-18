@@ -3,8 +3,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% if request.user.is_authenticated%}
     <title>Create post</title>
-
+    {% else %}
+    <title>Welcome to Twarzksiazka</title>
+    {% endif %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
@@ -26,10 +29,12 @@
 {% block content %}
 <div class="row">
     <div class="col-4">
+        {% if request.user.is_authenticated%}
         <p></p>
         <div class="GroupsDiv">
             Groups to add here
         </div>
+        {% endif %}
     </div>
     <div class="col-5">
         {% if request.user.is_authenticated %}
@@ -66,6 +71,16 @@
                             </div>
                             <div class="post-description">
                                 <p><b>{{elem.title}}</b><br>"{{elem.content}}"</p>
+                                    {% for like in likes %}
+                                        {% if like.post.id == elem.id %}
+                                            {{like.user.first_name}} {{like.user.last_name}}
+                                        {% if like.user == request.user %}
+                                            <a href="{% url 'unlike_post' post_id=elem.id %}" class="like-link">Unlike</a></p>                                        {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    liked post.
+                                <br>
+                                <a href="{% url 'like_post' post_id=elem.id %}" class="like-link">Like</a></p>
                             </div>
                             <div class="post-footer">
                                 <ul class="fb-comments">
@@ -80,7 +95,14 @@
                                                 <div class="cmt-details">
                                                     <a href="{% url 'profile' user_id=comment.author.id%}" class="text-decoration-none">{{comment.author.first_name}} {{comment.author.last_name}}</a>
                                                     <span> {{comment.content}} </span>
-                                                    <p> {{comment.pub_date | timesince }} <a href="#" class="like-link">Like</a></p>
+                                                    {% for like in likes %}
+                                                        {% if like.comment.id == comment.id %}
+                                                            <p>{{like.user.first_name}} {{like.user.last_name}} liked</p>
+                                                        {% if like.user == request.user %}
+                                                            <a href="{% url 'unlike_comment' comment_id=comment.id %}" class="like-link">Unlike</a>                                        {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <p> {{comment.pub_date | timesince }} <a href="{% url 'like_comment' comment.id %}" class="like-link">Like</a></p>
                                                 </div>
                                             </li>
                                             <hr>
@@ -115,6 +137,7 @@
         <p></p>
             {% endfor %}
         {% else %}
+        <p></p>
           <h2>Login or register to create new posts</h2>
         {% endif %}
     </div>
