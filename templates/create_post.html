@@ -71,16 +71,18 @@
                             </div>
                             <div class="post-description">
                                 <p><b>{{elem.title}}</b><br>"{{elem.content}}"</p>
+                                <img src="https://cdn2.iconfinder.com/data/icons/facebook-ui-colored/48/JD-22-512.png" height="30px" width="30px">
                                     {% for like in likes %}
                                         {% if like.post.id == elem.id %}
-                                            {{like.user.first_name}} {{like.user.last_name}}
-                                        {% if like.user == request.user %}
-                                            <a href="{% url 'unlike_post' post_id=elem.id %}" class="like-link">Unlike</a></p>                                        {% endif %}
+                                            <a href="{% url 'profile' user_id=like.user.id%}" class="text-decoration-none">{{like.user.first_name}} {{like.user.last_name}}</a>
+                                            {% if like.user == request.user %}
+                                                <a href="{% url 'unlike_post' post_id=elem.id %}" class="like-link">Unlike</a></p>
+                                            {% endif %}
                                         {% endif %}
                                     {% endfor %}
                                     liked post.
                                 <br>
-                                <a href="{% url 'like_post' post_id=elem.id %}" class="like-link">Like</a></p>
+                                <a href="{% url 'like_post' post_id=elem.id %}" class="like-link text-decoration-none">Like</a></p>
                             </div>
                             <div class="post-footer">
                                 <ul class="fb-comments">
@@ -93,16 +95,21 @@
                                                      src="{{ comment.author.avatar.url }}">
                                               </a>
                                                 <div class="cmt-details">
-                                                    <a href="{% url 'profile' user_id=comment.author.id%}" class="text-decoration-none">{{comment.author.first_name}} {{comment.author.last_name}}</a>
+                                                    <a href="{% url 'profile' user_id=comment.author.id%}" class="text-decoration-none">{{comment.author.first_name}} {{comment.author.last_name}}</a>:
                                                     <span> {{comment.content}} </span>
                                                     {% for like in likes %}
                                                         {% if like.comment.id == comment.id %}
-                                                            <p>{{like.user.first_name}} {{like.user.last_name}} liked</p>
-                                                        {% if like.user == request.user %}
-                                                            <a href="{% url 'unlike_comment' comment_id=comment.id %}" class="like-link">Unlike</a>                                        {% endif %}
+                                                            <p>
+                                                                <img src="https://cdn2.iconfinder.com/data/icons/facebook-ui-colored/48/JD-22-512.png" height="30px" width="30px">
+                                                                <a href="{% url 'profile' user_id=like.user.id%}" class="text-decoration-none">{{like.user.first_name}} {{like.user.last_name}}</a>
+                                                            </p>
+                                                            {% if like.user == request.user %}
+                                                                <a href="{% url 'unlike_comment' comment_id=comment.id %}" class="like-link">Unlike</a>
+                                                            {% endif %}
                                                         {% endif %}
                                                     {% endfor %}
-                                                    <p> {{comment.pub_date | timesince }} <a href="{% url 'like_comment' comment.id %}" class="like-link">Like</a></p>
+                                                    <p> {{comment.pub_date | timesince }} ago. <br>
+                                                        <a href="{% url 'like_comment' comment.id %}" class="like-link">Like</a></p>
                                                 </div>
                                             </li>
                                             <hr>

@@ -123,6 +123,9 @@ def create_post(request):
                            person not in all_friends and person != user and person.username != 'potezny-admin']
             suggested_friend = random.choice(not_friends)
             unread_messages = Messages.objects.filter(receiver=request.user, read=False)
+            friendship_requests = FriendRequest.objects.filter(is_active=True, receiver=CustomUser.objects.get(
+                username=request.user.username))
+
         except:
             friend_list = []
             friend_ids = []
@@ -132,6 +135,7 @@ def create_post(request):
             comments = []
             unread_messages = []
             likes = []
+            friendship_requests = []
     else:
         all_friends = []
         posts = []
@@ -139,6 +143,7 @@ def create_post(request):
         comments = []
         unread_messages = []
         likes = []
+        friendship_requests = []
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         form = PostForm(request.POST)
@@ -160,6 +165,7 @@ def create_post(request):
         comment_form = CommentForm()
     return render(request, 'create_post.html', {'form': form,
                                                 'unread_messages': unread_messages,
+                                                'friendship_requests': friendship_requests,
                                                 'comments': comments,
                                                 'comment_form': comment_form,
                                                 'posts': posts,
@@ -259,19 +265,19 @@ def add_friend(request, user_id):
             if friend_request:
                 friend_request.is_active = True
                 friend_request.save()  # zapisz zmiany w bazie danych
-                messages.error(request, f"Friend request to {friend.username} sent correctly.")
+                messages.error(request, f"Friend request to {friend.first_name} {friend.last_name} sent correctly.")
                 return redirect('profile', user_id=user_id)
-        messages.error(request, f"You've already sent a friend request to {friend.username}")
+        messages.error(request, f"You've already sent a friend request to {friend.first_name} {friend.last_name}")
         return redirect('profile', user_id=user_id)
 
     # Check if invitation is waiting
     if FriendRequest.objects.filter(sender=friend, receiver=user, is_active=True).exists():
-        messages.error(request, f"{friend.username} already sent you a friend request")
+        messages.error(request, f"{friend.first_name} {friend.last_name} already sent you a friend request")
         return redirect('profile', user_id=user_id)
 
     # Send invitation
     FriendRequest.objects.create(sender=user, receiver=friend)
-    messages.success(request, f"You've sent a friend request to {friend.username}")
+    messages.success(request, f"You've sent a friend request to {friend.first_name} {friend.last_name}")
     return redirect('profile', user_id=user_id)
 
 

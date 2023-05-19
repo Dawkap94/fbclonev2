@@ -20,15 +20,23 @@
 
   <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item active">
-          {% if request.user.is_authenticated %}
+      <li class="nav-item">
+        {% if request.user.is_authenticated %}
             <a class="nav-link" id="friends" href="{% url 'friends' %}">
-          {% else %}
-            <a class="nav-link" id="friends" href="{% url 'login' %}">
-          {% endif %}
-          <img src="https://icon-library.com/images/icon-friends/icon-friends-19.jpg"
-               width="30" height="30" alt="friends_requests"></a>
+        {% else %}
+        <a class="nav-link" href="{% url 'login' %}">
+        {% endif %}
+            <div style="position: relative;">
+                    <img src="https://icon-library.com/images/icon-friends/icon-friends-19.jpg"
+                   width="30" height="30" alt="friends_requests">
+                {% if friendship_requests %}
+                <span class="badge badge-danger" style="position: absolute; top: -5px; right: -5px;">{{friendship_requests.count}}</span>
+                {% else %}
+                {% endif %}
+            </div>
+        </a>
       </li>
+
       <li class="nav-item">
         {% if request.user.is_authenticated %}
         <a class="nav-link" href="{% url 'messenger' user_id=1 %}">
@@ -37,7 +45,7 @@
         {% endif %}
             <div style="position: relative;">
                 <img src="https://icon-library.com/images/message-icon-transparent/message-icon-transparent-0.jpg"
-                   width="25" height="25" alt="messages">
+                   width="30" height="30" alt="messages">
                 {% if unread_messages %}
                 <span class="badge badge-danger" style="position: absolute; top: -5px; right: -5px;">{{unread_messages.count}}</span>
                 {% else %}
