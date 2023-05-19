@@ -16,8 +16,10 @@ The application is a copy of a well-known social network. With this application 
 
 # To do
 - [X] red dot notification in messages icon
+- [X] create like system
 - [ ] add groups
-- [ ] create like system
 - [ ] hard work on the frontend
 
+
 #Deployed to https://fbclone.bieda.it
+# You can use login/pass: standard-user3 / uzytkownik123 : to test or create own account.
