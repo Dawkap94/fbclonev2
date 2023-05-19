@@ -15,19 +15,23 @@
 <div class="container">
   <h1>Search Results:</h1>
   <ul>
-    {% for user in results %}
-        <div class="FriendsDiv2">
-            {% if user.avatar %}
-            <img src="{{ user.avatar.url }}" alt="{{ user.first_name }}'s avatar" id="SearchResult">
-            <a href="{% url 'profile' user_id=user.id %}" class="text-decoration-none"> {{ user.first_name }} {{user.last_name}} </a>
-            {% else %}
-            <img src="" alt="{{ user.first_name }}'s avatar" id="SearchResult">
-            <a href="{% url 'profile' user_id=user.id %}" class="text-decoration-none"> {{ user.first_name }} {{user.last_name}} </a>
-            {% endif %}
-        </div>
-    {% empty %}
-    <li>No results found.</li>
-    {% endfor %}
+    {% if request.user.is_authenticated %}
+        {% for user in results %}
+            <div class="FriendsDiv2">
+                {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" alt="{{ user.first_name }}'s avatar" id="SearchResult">
+                <a href="{% url 'profile' user_id=user.id %}" class="text-decoration-none"> {{ user.first_name }} {{user.last_name}} </a>
+                {% else %}
+                <img src="" alt="{{ user.first_name }}'s avatar" id="SearchResult">
+                <a href="{% url 'profile' user_id=user.id %}" class="text-decoration-none"> {{ user.first_name }} {{user.last_name}} </a>
+                {% endif %}
+            </div>
+        {% empty %}
+        <li>No results found.</li>
+        {% endfor %}
+      {% else %}
+        <li>No results found. Log in to see results. </li>
+      {% endif %}
   </ul>
 </div>
 {% endblock %}
